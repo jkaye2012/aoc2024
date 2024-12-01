@@ -27,6 +27,6 @@ pub fn total_distance(input: &Input) -> i32 {
 pub fn similarity(input: &Input) -> i32 {
     let (a, b) = input;
     let mut scores = [0i32; 100000];
-    b.iter().for_each(|b| scores[*b as usize] += b);
-    a.iter().fold(0i32, |acc, a| acc + scores[*a as usize])
+    b.iter().for_each(|b| scores[*b as usize] += 1);
+    a.iter().fold(0i32, |acc, a| acc + scores[*a as usize] * a)
 }
