@@ -20,7 +20,7 @@ impl FlatMatrix<char> {
     }
 }
 
-impl<T: Copy> FlatMatrix<T> {
+impl<T: Copy + Eq> FlatMatrix<T> {
     pub fn iter(&self) -> Iter<'_, T> {
         self.matrix.iter()
     }
@@ -33,6 +33,21 @@ impl<T: Copy> FlatMatrix<T> {
 
     pub fn get(&self, coord: FlatMatrixCoord) -> T {
         self.matrix[coord.index()]
+    }
+
+    pub fn query(&self, coord: FlatMatrixCoord, query: Iter<'_, (Direction, T)>) -> bool {
+        let mut curr = coord;
+        for (dir, target) in query {
+            let next = curr.neighbor(*dir);
+            if let Some(n) = next
+                && self.get(n) == *target
+            {
+                curr = next.unwrap();
+            } else {
+                return false;
+            }
+        }
+        true
     }
 }
 
